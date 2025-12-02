@@ -1,7 +1,7 @@
 $length = 100
 # Switching between demo data and live
 $inputs = @("L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82" )
-#$inputs = Get-content -path "C:\temp\aoc1.txt"
+#$inputs = Get-content -path "C:\temp\data.txt"
 
 $position = 50
 $password = 0
