@@ -1,4 +1,4 @@
-$ids = @((get-content -path "C:\Temp\aoc2.csv" -delimiter ",").replace(",",""))
+$ids = @((get-content -path "C:\Temp\data.csv" -delimiter ",").replace(",",""))
 $invalididsum = 0
 
 
