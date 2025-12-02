@@ -2,7 +2,7 @@ $length = 100
 
 #Switches between demo and live datasets
 #$inputs = @("L68", "L30", "R48", "L5", "R60", "L55", "L1", "L99", "R14", "L82")
-$inputs = Get-Content "C:\temp\aoc1.txt"
+$inputs = Get-Content "C:\temp\data.txt"
 
 $position = 50
 $password = 0
