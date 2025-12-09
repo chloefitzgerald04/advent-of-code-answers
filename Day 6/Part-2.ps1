@@ -6,11 +6,11 @@ $cuts = for ($i=0; $i -lt $lastline.Length; $i++) {
 }
 
 $lines = Get-Content $path
-$columns = @()  
+$columns = @()
 
-for ($col = 0; $col -lt $cuts.Count - 1; $col++) {
+for ($col = 0; $col -lt $cuts.Count; $col++) {
     $start = $cuts[$col]
-    $length = $cuts[$col+1] - $cuts[$col]
+    $length = if ($col + 1 -lt $cuts.Count) { $cuts[$col + 1] - $cuts[$col] } else { $lastline.Length - $start }
 
     $colValues = @()
     foreach ($line in $lines) {
@@ -32,25 +32,36 @@ foreach ($column in $columns) {
     $numbers = $column | Where-Object { $_ -match '\d' }
     $operator = $column | Where-Object { $_ -notmatch '\d' }
     $digitGroups = @{}
-    if($operator -eq "*"){
-        [int64]$totalproduct = 1
-    }
-    # Loop through each number in the column
+    [int64]$totalproduct = 1
     foreach ($num in $numbers) {
-        $numStr = $num.Trim()  # Remove spaces
-        for ($i = 0; $i -lt $numStr.Length; $i++) {
+        for ($i = 0; $i -lt $num.Length; $i++) {
             if (-not $digitGroups.ContainsKey($i)) { $digitGroups[$i] = "" }
-            $digitGroups[$i] += $numStr[$i]
+            $digitGroups[$i] += $num[-$i]
         }
     }
     $newnumbers = @()
     foreach ($key in ($digitGroups.Keys | Sort-Object)) {
         $newnumbers += ,$($digitGroups[$key])
     }
-    foreach ($newnum in $newnumbers){
-        if ($operator -like "+"){
-            [int64]$totalsum += $newnum
-        }
+
+    $sanitisednewnumbers = @()
+    foreach ($x in $newnumbers){
+      $y = $x -replace "   ", $null
+      if ([int]$y -ne 0){
+        $sanitisednewnumbers += $y
+      }
     }
+
+    foreach ($newnum in $sanitisednewnumbers){ 
+         if(($operator.trim()) -eq "+"){
+            write-host "+" $newnum
+           [int64]$totalsum += [int64]$newnum
+           [int64]$totalproduct = 0
+         } elseif (($operator.trim()) -eq "*"){
+            write-host "*" $newnum
+           [int64]$totalproduct *= [int64]$newnum
+         }
+     }
+    $totalsum += $totalproduct 
 }
 $totalsum
