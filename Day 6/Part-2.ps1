@@ -44,18 +44,22 @@ foreach ($column in $columns) {
         $newnumbers += ,$($digitGroups[$key])
     }
 
+
+    #some reason it had a "    " number in it so ig just replaced it. Probably way easier ways to do this
     $sanitisednewnumbers = @()
     foreach ($x in $newnumbers){
-      $y = $x -replace "   ", $null
+      $y = $x -replace "    ", $null
       if ([int]$y -ne 0){
         $sanitisednewnumbers += $y
       }
     }
 
+    #apply the actual calculation
     foreach ($newnum in $sanitisednewnumbers){ 
          if(($operator.trim()) -eq "+"){
             write-host "+" $newnum
            [int64]$totalsum += [int64]$newnum
+           #prevent unnec
            [int64]$totalproduct = 0
          } elseif (($operator.trim()) -eq "*"){
             write-host "*" $newnum
